@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap&family=Lora:ital,wght@0,400..700;1,400..700&display=swap&family=Manrope:wght@200..800&display=swap');
+@import "tailwindcss";
+
+
+:root {
+
+
+  /* --- Accent (brand & actions) --- */
+  /* Warm limegreen used for buttons, highlights, emphasis */
+  --color-accent: 128, 255, 0; 
+
+  
+
+  /* --- Surfaces (cards, nav, image frames) --- */
+  --color-surface: 255 255 255;
+  --color-surface-muted: 241 245 249; /* slate-100 */
+
+  /* --- Ink (text colors) --- */
+ /* slate-500 */
+
+  /* --- Borders & dividers --- */
+  --color-border-subtle: 226 232 240; /* slate-200 */
+}
+
+
+
+@theme {
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Outfit', sans-serif;
+  --font-secondary: 'Lora', sans-serif;
+  --font-tertiary: 'Manrope', sans-serif;
+}
+
+/* Create custom utility classes manually */
+@layer utilities {
+  /* Accent */
+  .text-accent {
+    color: rgb(var(--color-accent));
+  }
+  .bg-accent {
+    background-color: rgb(var(--color-accent));
+  }
+
+
+}
+
+body {
+  /* background-color: rgb(var(--color-background)); */
+  font-family: var(--font-sans);
+}
+
+@keyframes marquee {
+   0% {
+    transform: translateX(0);
+  }
+  45% {
+    transform: translateX(-25%);
+  }
+  55% {
+    transform: translateX(-25%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 60s linear infinite;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+/* Smooth theme transitions */
+*,
+*::before,
+*::after {
+  transition-property:
+    background-color,
+    color,
+    border-color,
+    box-shadow,
+    fill,
+    stroke;
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+*,
+*::before,
+*::after {
+  transition-delay: 20ms;
+}
