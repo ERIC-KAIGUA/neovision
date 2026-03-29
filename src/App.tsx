@@ -7,6 +7,7 @@ import { OrderTrackingPage } from './pages/Ordertrackingpage'
 import { CheckoutPage } from './components/checkoutpage'
 import { ProtectedAdminRoute } from './helper/protectedRoute'
 import { BrowserRouter as Router, Routes, Route, Navigate  } from 'react-router-dom'
+import ScrollToTop from './components/scrollToTop'
 import './App.css'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import { CartProvider } from './context/CartContext'
@@ -34,6 +35,7 @@ function App() {
     <AuthProvider>
       <CartProvider>
         <Router>
+          <ScrollToTop />
              <Toaster
             position="top-right"
             gutter={10}
