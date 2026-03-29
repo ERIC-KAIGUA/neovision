@@ -30,9 +30,6 @@ export const Header = () => {
      const homeNavigation = () =>{
         navigate("/")
      }
-     const productNavigation = () => {
-        navigate("/productpage")
-     }
      const cartNavigation = () => {
         navigate("/cart")
      }
