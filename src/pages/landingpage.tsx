@@ -68,9 +68,9 @@ export const Landingpage = () => {
 
 
                <div className="absolute inset-5 flex flex-col justify-center px-10 text-white">
-                <p className="font-secondary text-6xl">See the world in <span className="font-secondary italic">Style.</span></p>
+                <p className="font-secondary text-5xl">See the world in <span className="font-secondary italic">Style.</span></p>
 
-                <p className="font-body text-gray-600 text-2xl mt-15">Premium frames, contact lenses and sunglasses</p>
+                <p className="font-body text-black text-2xl mt-15">Premium frames, contact lenses and sunglasses</p>
                <p className="font-body text-accent text-xl">crafted for those who see life as a statement.</p>
 
                 <div className="hidden mt-5 md:flex flex-row gap-3.5">
@@ -300,7 +300,7 @@ export const Landingpage = () => {
           <p className="font-secondary text-white text-4xl">Find Your Frame</p>
           <p className="font-body text-gray-400 text-wrap text-center">Browse 500+ styles across frames, contacts and sunglasses — with free 48-hour delivery on every order.</p>
 
-          <button className="flex items-center gap-2 rounded-full bg-white text-black px-6 py-3 font-semibold  hover:bg-gray-300 transition" onClick={shopNavigation}>Shop the full collection <span>→</span></button>
+          <button className="flex items-center gap-2 rounded-full bg-white text-black px-6 py-3 font-semibold mb-3  hover:bg-gray-300 transition" onClick={shopNavigation}>Shop the full collection <span>→</span></button>
         </div>
       </div>
 

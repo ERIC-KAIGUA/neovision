@@ -132,7 +132,6 @@ export const Header = () => {
             <motion.div className="md:hidden absolute top-full left-0 w-full bg-white rounded-md border-b border-white/10 shadow-lg shadow-black/40 px-6 py-4" initial={{opacity:0, y: -5}} animate={{opacity:1, y: 0}} transition={{duration:1, ease:"easeInOut"}} exit={{opacity:0, y:-5}}>
                  <ul className="flex flex-col gap-4">
                     <li className="cursor-pointer text-ink-muted hover:text-black transition-all duration-150 font-body" onClick={homeNavigation}>Home</li>
-                    <li className="cursor-pointer text-ink-muted hover:text-black transition-all duration-150 font-body" onClick={shopNavigation}>About</li>
                     <li className="cursor-pointer text-ink-muted hover:text-black transition-all duration-150 font-body" onClick={shopNavigation}>Products</li>
                     <li className="cursor-pointer text-ink-muted hover:text-black transition-all duration-150 font-body" onClick={ordersNavigation}>Order</li>
                   </ul>

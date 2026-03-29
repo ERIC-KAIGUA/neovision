@@ -217,7 +217,7 @@ export const ProductPage = () => {
         <div className="pt-28 flex flex-col items-center justify-center py-28 text-center">
           <p className="font-secondary text-4xl text-gray-200 mb-4">Product not found</p>
           <button
-            onClick={() => navigate("/shop")}
+            onClick={() => navigate("/shoppage")}
             className="flex items-center gap-2 px-6 py-3 rounded-xl bg-black text-white font-body text-sm hover:bg-gray-800 transition-all"
           >
             <HiOutlineArrowLeft size={16} />
@@ -237,7 +237,7 @@ export const ProductPage = () => {
         {/* ── Breadcrumb ── */}
         <div className="py-5 flex items-center gap-2">
           <button
-            onClick={() => navigate("/shop")}
+            onClick={() => navigate("/shoppage")}
             className="flex items-center gap-1.5 text-white bg-black px-6 py-3  font-display rounded-xs text-sm transition-colors group"
           >
             <HiOutlineArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
@@ -268,7 +268,7 @@ export const ProductPage = () => {
                 <img
                   src={product.imageUrl}
                   alt={product.name}
-                  className={`w-full h-full object-cover ${globallyOutOfStock ? "opacity-50 grayscale" : ""}`}
+                  className={`w-full h-full object-cover shadow-lg ${globallyOutOfStock ? "opacity-50 grayscale" : ""}`}
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-gray-300 font-body">
@@ -364,7 +364,7 @@ export const ProductPage = () => {
               <p className="font-tertiary text-[10px] tracking-widest text-gray-400 uppercase mb-3">
                 Available In Stores
               </p>
-              <div className="rounded-2xl border border-gray-100 overflow-hidden divide-y divide-gray-100">
+              <div className="p-3 rounded-2xl border border-gray-500 overflow-hidden divide-y divide-gray-100">
                 {STATIC_BRANCHES.map((branch) => (
                   <BranchBadge
                     key={branch.id}
@@ -382,7 +382,7 @@ export const ProductPage = () => {
                 Quantity
               </p>
               <div className="flex items-center gap-4">
-                <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden">
+                <div className="flex items-center border border-gray-600 rounded-xl overflow-hidden">
                   <button
                     onClick={() => setQuantity((q) => Math.max(1, q - 1))}
                     className="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-black hover:bg-gray-50 transition-all font-body text-lg"

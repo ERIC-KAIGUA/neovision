@@ -142,7 +142,7 @@ const PaymentOverlay = ({
               Order ID: {orderId.slice(0, 8).toUpperCase()}
             </p>
             <button
-              onClick={() => navigate("/shop")}
+              onClick={() => navigate("/shoppage")}
               className="w-full py-3.5 rounded-2xl bg-black text-white font-body font-semibold hover:bg-gray-800 active:scale-[0.98] transition-all"
             >
               Continue Shopping

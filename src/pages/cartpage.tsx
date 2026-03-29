@@ -48,7 +48,7 @@ export const CartPage = () => {
               You haven't added anything yet. Browse our collection and find your perfect pair.
             </p>
             <button
-              onClick={() => navigate("/shop")}
+              onClick={() => navigate("/shoppage")}
               className="flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-black text-white font-body font-semibold hover:bg-gray-800 active:scale-[0.98] transition-all mx-auto"
             >
               <HiOutlineShoppingBag size={16} />
@@ -265,7 +265,7 @@ export const CartPage = () => {
 
                 {/* Add more items */}
                 <button
-                  onClick={() => navigate("/shop")}
+                  onClick={() => navigate("/shoppage")}
                   className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl border border-gray-200 text-gray-600 font-body text-sm hover:border-gray-400 hover:text-black active:scale-[0.98] transition-all"
                 >
                   <HiOutlineArrowLeft size={14} />
