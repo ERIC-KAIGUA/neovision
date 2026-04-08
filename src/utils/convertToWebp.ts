@@ -1,9 +1,6 @@
 /**
- * Converts any image File to a WebP Blob using the Canvas API.
- * The original file never leaves the browser — only the WebP blob is uploaded.
- *
- * @param file    - The source image file (jpg, png, gif, etc.)
- * @param quality - WebP quality 0–1 (default 0.85)
+ * @param file    
+ * @param quality 
  * @returns       - A WebP Blob ready for Firebase Storage upload
  */
 export const convertToWebp = (file: File, quality = 0.85): Promise<Blob> => {

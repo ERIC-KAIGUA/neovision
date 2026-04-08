@@ -61,8 +61,8 @@ export const Landingpage = () => {
     <div className= "bg-white">
         <Header />
 
-        <motion.div initial={{opacity:0}} animate={{opacity:1}} transition={{duration:1.5, ease:"easeIn"}} className="relative">
-            <img src={model1} className=" w-full h-105 mt-21 rounded-4xl md:h-125 object-cover object-top p-3" alt="glasses model"/>
+        <motion.div initial={{opacity:0}} animate={{opacity:1}} transition={{duration:1.5, ease:"easeIn"}} className=" relative">
+            <img src={model1} className=" w-full h-105 mt-25 rounded-4xl md:h-125 object-cover object-top p-3" alt="glasses model"/>
             {/*Dark overlay filter*/}
             <div className="absolute inset-2.5 bg-linear-to-t from-black/70 via-black/30 to-transparent rounded-4xl"></div>
 
@@ -162,7 +162,7 @@ export const Landingpage = () => {
                           <div className="flex-col gap-2">
                             <p className="font-tertiary text-sm text-gray-400 tracking-widest mb-4">OUR PROMISE</p>
                             <p className="font-secondary text-lg mb-3">Every pair tells a story.</p>
-                            <p className="font-tertiary text-xs text-gray-400 tracking-wide mb-4">From the first sketch to the final fitting, NeoVision frames are built to last a lifetime and look better every year.</p>
+                            <p className="font-tertiary text-xs text-gray-400 tracking-wide mb-4">From the first sketch to the final fitting, LuminaVision frames are built to last a lifetime and look better every year.</p>
                           </div>
                         </div>
                     </div>      
@@ -293,7 +293,7 @@ export const Landingpage = () => {
       </div>
     </div>
 
-    <motion.div initial={{opacity:0, y:60}} whileInView={{opacity:1,y:0}} transition={{duration:1, ease:"easeIn"}} viewport={{ once: true, amount: 0.2 }} className="p-6">
+    <motion.div initial={{opacity:0, y:60}} whileInView={{opacity:1,y:0}} transition={{duration:1, ease:"easeIn"}} viewport={{ once: true, amount: 0.2 }} className="p-1.5">
       <div className="bg-black w-full rounded-2xl p-5 overflow-hidden px-5 h-84 shadow-lg">
         <div className="p-4 flex flex-col items-center justify-center gap-5">
           <p className="font-tertiary text-gray-500 tracking-widest text-xs mt-8">START HERE</p>

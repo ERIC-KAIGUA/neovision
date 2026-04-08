@@ -1,4 +1,4 @@
-import {  useState } from "react";
+import {  useState, useEffect } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoCloseSharp } from "react-icons/io5";
 import { AnimatePresence, motion } from "framer-motion"
@@ -13,11 +13,18 @@ import { useCart } from "../context/CartContext";
 export const Header = () => {
 
     const [ sideNavOpen, setSideNavOpen] = useState(false)
+    const [scrolled, setScrolled ] = useState(false) 
     const navigate = useNavigate()
     const { signInWithGoogle } = useAuth();
     const { user, logout } = useAuth();
     const { cartCount } = useCart();
-   
+  
+    
+    useEffect(()=>{
+      const onScroll = () => setScrolled(window.scrollY > 20);
+      window.addEventListener("scroll", onScroll, { passive:true });
+      return ()=> window.removeEventListener("scroll",onScroll);
+    }, []);
    
 
 // Toggling sidenav on small screens
@@ -38,10 +45,17 @@ export const Header = () => {
      }  
 
   return (
-   <header className="fixed top-0 left-0 w-full z-50 bg-black/20 backdrop-blur-lg border-b border-white/10  ring-1 ring-white/5 shadow-lg shadow-black/40 rounded-b-2xl">
-      <nav className=" relative md:mx-auto max-w-7xl px-6 py-4 flex items-center justify-between text-foreground">
+   <motion.header className={["fixed z-50 left-0 right-0 transition-all duration-300 ease-in-out",
+                              !scrolled && "top-0 mx-0 sm:top-4 sm:mx-8 sm:rounded-2xl rounded-b-2xl", scrolled  && "top-0 mx-0 rounded-b-2xl",
+                                "bg-black/20 backdrop-blur-lg",
+                                "border border-white/10",
+                                "ring-1 ring-white/5",
+                                "shadow-lg shadow-black/30",
+                              ].filter(Boolean).join(" ")}
+      >
+      <nav className=" relative md:mx-auto max-w-7xl px-6 py-3.5 flex items-center justify-between text-foreground">
         <div className="cursor-pointer" onClick={homeNavigation}>
-         <p className="font-body text-2xl text-accent">Neo<span className="text-black">Vision</span></p> 
+         <p className="font-body text-2xl text-accent">Lumina<span className="text-black">Vision</span></p> 
        </div>
 
         <ul className=" hidden md:flex gap-6 absolute left-1/2 -translate-x-1/2">
@@ -146,6 +160,6 @@ export const Header = () => {
       </div> 
       </nav>
     
-    </header>
+    </motion.header>
   )
 }

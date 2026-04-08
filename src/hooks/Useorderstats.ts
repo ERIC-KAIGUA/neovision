@@ -10,24 +10,20 @@ import {
 import { db } from "../firebase/config";
 
 export interface OrderStats {
-  // ── Real-time (live listeners) ────────────────────────────────────────────
-  pendingCount:    number;   // orders with status === "pending"
-  todayItemCount:  number;   // total items across today's orders
-
-  // ── Fetched on load + manual refresh ─────────────────────────────────────
-  totalRevenue:    number;   // sum of totals where paymentStatus === "completed"
-  completedCount:  number;   // orders with status === "completed" | "dispatched" | "delivered"
-
-  // ── Meta ──────────────────────────────────────────────────────────────────
+ 
+  pendingCount:    number;   
+  todayItemCount:  number;   
+  totalRevenue:    number;  
+  completedCount:  number;  
   revenueLoading:  boolean;
-  statsLoading:    boolean;  // true on first real-time hydration
+  statsLoading:    boolean; 
   lastRefreshed:   Date | null;
 
-  // ── Actions ───────────────────────────────────────────────────────────────
-  refresh: () => void;       // manually re-fetch revenue + completed count
+  
+  refresh: () => void;       
 }
 
-/** Returns midnight of today in the local timezone as a Firestore Timestamp */
+
 const startOfToday = (): Timestamp => {
   const d = new Date();
   d.setHours(0, 0, 0, 0);
@@ -35,12 +31,10 @@ const startOfToday = (): Timestamp => {
 };
 
 export const useOrderStats = (branchId?: string | null): OrderStats => {
-  // ── Real-time state ───────────────────────────────────────────────────────
+  
   const [pendingCount,   setPendingCount]   = useState(0);
   const [todayItemCount, setTodayItemCount] = useState(0);
   const [statsLoading,   setStatsLoading]   = useState(true);
-
-  // ── Fetched state ─────────────────────────────────────────────────────────
   const [totalRevenue,    setTotalRevenue]    = useState(0);
   const [completedCount,  setCompletedCount]  = useState(0);
   const [revenueLoading,  setRevenueLoading]  = useState(true);
@@ -48,8 +42,7 @@ export const useOrderStats = (branchId?: string | null): OrderStats => {
 
   const ordersRef = collection(db, "orders");
 
-  // ── Helper — filter by branch if one is selected ──────────────────────────
-  // Orders store fulfillingBranch.branchId — we filter on that field
+  
   const withBranch = (baseQuery: ReturnType<typeof query>) =>
     branchId
       ? query(baseQuery, where("fulfillingBranch.branchId", "==", branchId))
@@ -69,7 +62,7 @@ export const useOrderStats = (branchId?: string | null): OrderStats => {
     return () => unsub();
   }, [branchId]);
 
-  // ── REAL-TIME 2: Items ordered today ─────────────────────────────────────
+ 
   useEffect(() => {
     const q = withBranch(
       query(ordersRef, where("createdAt", ">=", startOfToday()))
@@ -90,7 +83,7 @@ export const useOrderStats = (branchId?: string | null): OrderStats => {
     return () => unsub();
   }, [branchId]);
 
-  // ── FETCH: Revenue + completed count ─────────────────────────────────────
+  
   const fetchRevenueStats = useCallback(async () => {
     setRevenueLoading(true);
     try {
@@ -105,7 +98,7 @@ export const useOrderStats = (branchId?: string | null): OrderStats => {
       );
       setTotalRevenue(revenue);
 
-      // Completed orders — status is completed, dispatched, or delivered
+     
       const completedQuery = withBranch(
         query(ordersRef, where("status", "in", ["completed", "dispatched", "delivered"]))
       );

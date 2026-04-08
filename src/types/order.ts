@@ -1,79 +1,73 @@
 import { type Category, type ProductColor, type FrameSize } from "./adminTypes";
 
-// ─── Order Status ─────────────────────────────────────────────────────────────
-// Full lifecycle: placed → payment confirmed → admin processes → ships → done
+
 
 export type OrderStatus =
-  | "pending"     // Order placed, awaiting payment confirmation by admin
-  | "processing"  // Payment confirmed, order being prepared/sourced
-  | "completed"   // Order is packed and ready
-  | "dispatched"  // Order handed to delivery
-  | "delivered";  // Customer has received the order
+  | "pending"     
+  | "processing"  
+  | "completed"   
+  | "dispatched"  
+  | "delivered"; 
 
-// ─── Payment ──────────────────────────────────────────────────────────────────
+
 
 export type PaymentMethod = "mpesa";
 
 export type PaymentStatus =
-  | "pending"    // STK push sent, customer hasn't entered PIN yet
-  | "completed"  // M-Pesa payment confirmed via Daraja callback
-  | "failed";    // STK push timed out or customer cancelled
+  | "pending"    
+  | "completed"  
+  | "failed";    
 
-// ─── Order Item ───────────────────────────────────────────────────────────────
-// Snapshot of cart item at time of order — frozen so price/name changes
-// on the product don't affect historical orders
+
 
 export interface OrderItem {
   itemId:        string;
   name:          string;
-  price:         number;         // Price per unit at time of order (Ksh)
+  price:         number;        
   imageUrl:      string;
   category:      Category;
   quantity:      number;
   selectedColor: ProductColor | null;
   selectedSize:  FrameSize | null;
-  subtotal:      number;         // price × quantity, pre-computed for admin display
+  subtotal:      number;        
 }
 
-// ─── Delivery Details ─────────────────────────────────────────────────────────
+
 
 export interface DeliveryDetails {
   customerName:    string;
-  customerPhone:   string;  // Format sent to Daraja: 2547XXXXXXXX
+  customerPhone:   string;
   deliveryAddress: string;
-  deliveryNotes:   string;  // Gate number, landmark, etc.
+  deliveryNotes:   string;  
 }
 
-// ─── Fulfilling Branch ────────────────────────────────────────────────────────
-// The branch whose stock is decremented for this order.
-// Auto-selected at order creation time (highest combined stock).
+
 
 export interface FulfillingBranch {
   branchId:   string;
   branchName: string;
 }
 
-// ─── Order ────────────────────────────────────────────────────────────────────
-// Stored at: orders/{orderId}
+
 
 export interface Order {
   id:               string;
-  customerId:       string;         // Firebase Auth UID
+  customerId:       string;         
   customerEmail:    string;
   delivery:         DeliveryDetails;
   items:            OrderItem[];
   fulfillingBranch: FulfillingBranch;
   paymentMethod:    PaymentMethod;
   paymentStatus:    PaymentStatus;
-  mpesaReceiptNo:   string | null;  // Filled by Daraja callback
-  checkoutRequestId: string | null; // Daraja CheckoutRequestID for polling
+  mpesaReceiptNo:   string | null;  
+  checkoutRequestId: string | null; 
   total:            number;
   status:           OrderStatus;
   createdAt?:       { seconds: number; nanoseconds: number };
   updatedAt?:       { seconds: number; nanoseconds: number };
 }
 
-// ─── Checkout Form ────────────────────────────────────────────────────────────
+
 
 export interface CheckoutFormData {
   customerName:    string;
@@ -89,8 +83,6 @@ export const EMPTY_CHECKOUT_FORM: CheckoutFormData = {
   deliveryNotes:   "",
 };
 
-// ─── Order Status Meta ────────────────────────────────────────────────────────
-// Labels and colours for displaying status badges in admin + customer views
 
 export const ORDER_STATUS_META: Record<
   OrderStatus,

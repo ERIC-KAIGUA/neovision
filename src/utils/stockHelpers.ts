@@ -7,14 +7,10 @@ import { type CartItem } from "../types/cart";
 import { type FulfillingBranch } from "../types/order";
 import { STATIC_BRANCHES } from "../types/adminTypes";
 
-/**
- * Picks the branch with the highest TOTAL stock across all items in the cart.
- * Falls back to Nairobi CBD if stock data is missing everywhere.
- */
+
 export const pickFulfillingBranch = (
   cartItems: CartItem[],
   stockMap: Record<string, Record<string, number>>
-  // stockMap shape: { [itemId]: { [branchId]: qty } }
 ): FulfillingBranch => {
   const branchTotals: Record<string, number> = {};
 
@@ -37,14 +33,7 @@ export const pickFulfillingBranch = (
   };
 };
 
-/**
- * Atomically decrements stock for all ordered items at the fulfilling branch.
- * Uses a Firestore transaction so concurrent orders cannot oversell.
- *
- * If the fulfilling branch has insufficient stock for an item,
- * it falls back to decrementing from the other branch for that item.
- * Stock never goes below 0.
- */
+
 export const decrementStockTransaction = async (
   db: Firestore,
   cartItems: CartItem[],
@@ -76,7 +65,7 @@ export const decrementStockTransaction = async (
           primaryQty - item.quantity
         );
       } else {
-        // Not enough at primary — use what's available then pull rest from other branch
+        
         newStock[fulfillingBranchId] = 0;
         const remaining = item.quantity - primaryQty;
 

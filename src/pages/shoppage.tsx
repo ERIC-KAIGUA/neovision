@@ -76,7 +76,7 @@ export const ShopPage = () => {
           The Collection
         </p>
         <h1 className="font-secondary text-5xl md:text-6xl text-black leading-tight">
-          Shop <span className="font-secondary italic text-accent">Neo<span className="text-black">Vision</span></span>
+          Shop <span className="font-secondary italic text-accent">Lumina<span className="text-black">Vision</span></span>
         </h1>
         <p className="font-body text-gray-500 mt-3 text-lg max-w-md">
           Premium frames, contact lenses and sunglasses — crafted for those who see life as a statement.

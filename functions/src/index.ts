@@ -1,56 +1,23 @@
-/**
- * NeoVision — Firebase Cloud Functions
- * Region: europe-west3 (Frankfurt)
- *
- * Functions:
- *   initiateSTKPush  — triggered by frontend via httpsCallable
- *                      calls Daraja sandbox STK push endpoint
- *   mpesaCallback    — public HTTP endpoint called by Safaricom servers
- *                      updates order paymentStatus in Firestore
- *
- * ─── Environment secrets (set once via Firebase CLI) ─────────────────────────
- *
- *   firebase functions:secrets:set MPESA_CONSUMER_KEY
- *   firebase functions:secrets:set MPESA_CONSUMER_SECRET
- *   firebase functions:secrets:set MPESA_SHORTCODE
- *   firebase functions:secrets:set MPESA_PASSKEY
- *
- * Callback URL to register in Daraja portal:
- *   https://europe-west3-neovision-22326.cloudfunctions.net/mpesaCallback
- *
- * ─── Deployment ──────────────────────────────────────────────────────────────
- *   cd functions
- *   npm install
- *   firebase deploy --only functions
- */
-
 import * as admin from "firebase-admin";
 import { onCall, onRequest, HttpsError } from "firebase-functions/v2/https";
 import { defineSecret } from "firebase-functions/params";
 import axios from "axios";
 
-// ── Initialise Firebase Admin ─────────────────────────────────────────────────
+
 admin.initializeApp();
 const db = admin.firestore();
 
-// ── Region ────────────────────────────────────────────────────────────────────
 const REGION = "europe-west3";
 
-// ── Daraja sandbox base URL ───────────────────────────────────────────────────
 const DARAJA_BASE = "https://sandbox.safaricom.co.ke";
 
-// ── Secrets ───────────────────────────────────────────────────────────────────
+
 const CONSUMER_KEY    = defineSecret("MPESA_CONSUMER_KEY");
 const CONSUMER_SECRET = defineSecret("MPESA_CONSUMER_SECRET");
 const SHORTCODE       = defineSecret("MPESA_SHORTCODE");
 const PASSKEY         = defineSecret("MPESA_PASSKEY");
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
 
-/**
- * Normalises a Kenyan phone number to the Daraja format: 2547XXXXXXXX
- * Accepts: 07XXXXXXXX | 01XXXXXXXX | +2547XXXXXXXX | 2547XXXXXXXX
- */
 const formatPhone = (raw: string): string => {
   const digits = raw.replace(/\D/g, "");
   if (digits.startsWith("0"))   return "254" + digits.slice(1);
@@ -58,11 +25,7 @@ const formatPhone = (raw: string): string => {
   return digits; // already clean
 };
 
-/**
- * Fetches a short-lived OAuth2 access token from Daraja.
- * Tokens expire after 1 hour — we request a fresh one per call
- * since Cloud Functions are stateless.
- */
+
 const getAccessToken = async (
   consumerKey: string,
   consumerSecret: string
@@ -80,11 +43,7 @@ const getAccessToken = async (
   return data.access_token as string;
 };
 
-/**
- * Generates the Base64 password and timestamp required by the STK push endpoint.
- * Formula: Base64(shortcode + passkey + timestamp)
- * Timestamp format: YYYYMMDDHHmmss
- */
+
 const buildPassword = (
   shortcode: string,
   passkey: string
@@ -99,22 +58,12 @@ const buildPassword = (
   return { password, timestamp };
 };
 
-// ── initiateSTKPush ───────────────────────────────────────────────────────────
-/**
- * Called by the frontend via Firebase httpsCallable.
- * onCall automatically handles:
- *   - CORS (no manual headers needed)
- *   - Authentication context (request.auth)
- *   - JSON serialisation
- *
- * Expected payload: { phone: string, amount: number, orderId: string }
- * Returns:          { success: true, checkoutRequestId: string }
- */
+
 export const initiateSTKPush = onCall(
   {
     region:  REGION,
     secrets: [CONSUMER_KEY, CONSUMER_SECRET, SHORTCODE, PASSKEY],
-    // cors: true is the default for onCall — no further config needed
+
   },
   async (request) => {
     // Enforce authentication — only signed-in users can place orders
@@ -190,7 +139,7 @@ export const initiateSTKPush = onCall(
     } catch (error: unknown) {
       console.error("[initiateSTKPush] Error:", error);
 
-      // Surface Daraja's own error message if available
+     
       const darajaMessage =
         (error as { response?: { data?: { errorMessage?: string } } })
           ?.response?.data?.errorMessage;
@@ -203,18 +152,10 @@ export const initiateSTKPush = onCall(
   }
 );
 
-// ── mpesaCallback ─────────────────────────────────────────────────────────────
-/**
- * Public HTTP endpoint — called by Safaricom's servers, NOT by the browser.
- * No CORS headers needed here since this is a server-to-server call.
- *
- * Safaricom sends a POST with the payment result. We match it to an order
- * via CheckoutRequestID and update paymentStatus accordingly.
- */
 export const mpesaCallback = onRequest(
   {
     region:  REGION,
-    secrets: [], // no secrets needed — we only write to Firestore
+    secrets: [], 
   },
   async (req, res) => {
     // Safaricom always sends POST
@@ -234,7 +175,7 @@ export const mpesaCallback = onRequest(
 
       const { CheckoutRequestID, ResultCode, CallbackMetadata } = stkCallback;
 
-      // Find the matching order by CheckoutRequestID
+      
       const snapshot = await db
         .collection("orders")
         .where("checkoutRequestId", "==", CheckoutRequestID)
@@ -250,8 +191,7 @@ export const mpesaCallback = onRequest(
       const orderRef = snapshot.docs[0].ref;
 
       if (ResultCode === 0) {
-        // ── Payment successful ────────────────────────────────────────────────
-        // Extract the M-Pesa receipt number from CallbackMetadata
+        
         const metaItems: { Name: string; Value: unknown }[] =
           CallbackMetadata?.Item ?? [];
 
@@ -270,12 +210,12 @@ export const mpesaCallback = onRequest(
         await orderRef.update({
           paymentStatus:  "completed",
           mpesaReceiptNo: receiptNo,
-          status:         "pending", // moves order into admin queue
+          status:         "pending", 
           updatedAt:      admin.firestore.FieldValue.serverTimestamp(),
         });
 
       } else {
-        // ── Payment failed or cancelled ───────────────────────────────────────
+       
         console.warn(
           `[mpesaCallback] Payment failed — CheckoutRequestID: ${CheckoutRequestID}, ResultCode: ${ResultCode}`
         );
@@ -286,12 +226,12 @@ export const mpesaCallback = onRequest(
         });
       }
 
-      // Respond to Safaricom with success — they expect this exact shape
+     
       res.status(200).json({ ResultCode: 0, ResultDesc: "Accepted" });
 
     } catch (error) {
       console.error("[mpesaCallback] Unexpected error:", error);
-      // Still respond 200 to Safaricom — otherwise they retry the callback
+     
       res.status(200).json({ ResultCode: 0, ResultDesc: "Accepted" });
     }
   }

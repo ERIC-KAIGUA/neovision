@@ -1,5 +1,3 @@
-// ─── Categories ───────────────────────────────────────────────────────────────
-
 export type Category = "frames" | "contactLenses" | "sunglasses";
 
 export const CATEGORIES: { key: Category; label: string }[] = [
@@ -14,7 +12,7 @@ export const CATEGORY_LABELS: Record<Category, string> = {
   sunglasses: "Sunglasses",
 };
 
-// ─── Branches ─────────────────────────────────────────────────────────────────
+
 
 export interface Branch {
   id: string;
@@ -31,19 +29,17 @@ export const BRANCH_IDS = {
 export const STATIC_BRANCHES: Branch[] = [
   {
     id: BRANCH_IDS.NAIROBI,
-    name: "NeoVision Nairobi CBD",
+    name: "LuminaVision Nairobi CBD",
     location: "Nairobi CBD",
     isActive: true,
   },
   {
     id: BRANCH_IDS.KIKUYU,
-    name: "NeoVision Kikuyu",
+    name: "LuminaVision Kikuyu",
     location: "Kikuyu",
     isActive: true,
   },
 ];
-
-// ─── Colors ───────────────────────────────────────────────────────────────────
 
 export interface ProductColor {
   name: string;
