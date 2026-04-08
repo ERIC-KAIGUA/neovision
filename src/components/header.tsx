@@ -8,7 +8,61 @@ import { useAuth } from "../context/AuthContext";
 import { UserAvatar } from "./userAvatar";
 import { useCart } from "../context/CartContext";
 
-
+const LogoutModal = ({
+  onConfirm,
+  onCancel,
+}: {
+  onConfirm: () => void;
+  onCancel:  () => void;
+}) => (
+  <motion.div
+    className="fixed inset-0 z-[100] flex items-center justify-center px-4"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    transition={{ duration: 0.2 }}
+  >
+    {/* Backdrop */}
+    <motion.div
+      className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+      onClick={onCancel}
+    />
+ 
+    {/* Modal card */}
+    <motion.div
+      className="relative bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm flex flex-col items-center gap-4"
+      initial={{ scale: 0.92, opacity: 0, y: 12 }}
+      animate={{ scale: 1,    opacity: 1, y: 0  }}
+      exit={{    scale: 0.92, opacity: 0, y: 12 }}
+      transition={{ type: "spring", stiffness: 340, damping: 28 }}
+    >
+ 
+     
+      <div className="text-center">
+        <p className="font-playfair text-xl font-bold text-ink">Signing out?</p>
+        <p className="text-sm text-ink-muted mt-1">
+          You'll need to sign back in to place orders or view your order history.
+        </p>
+      </div>
+ 
+      {/* Actions */}
+      <div className="flex flex-col sm:flex-row gap-3 w-full mt-1">
+        <button
+          onClick={onConfirm}
+          className="flex-1 rounded-full py-2.5 text-white text-sm font-semibold bg-accent shadow-md shadow-orange-300/30 hover:brightness-105 active:scale-95 transition-all"
+        >
+          Yes, sign out
+        </button>
+        <button
+          onClick={onCancel}
+          className="flex-1 rounded-full py-2.5 text-ink text-sm font-semibold border-2 border-slate-200 hover:border-slate-400 transition-all"
+        >
+          Stay signed in
+        </button>
+      </div>
+    </motion.div>
+  </motion.div>
+);
 
 export const Header = () => {
 
@@ -18,6 +72,11 @@ export const Header = () => {
     const { signInWithGoogle } = useAuth();
     const { user, logout } = useAuth();
     const { cartCount } = useCart();
+     const [showLogout,    setShowLogout]    = useState(false);
+      const handleLogout = async () => {
+    setShowLogout(false);
+    await logout();
+  };
   
     
     useEffect(()=>{
@@ -45,6 +104,7 @@ export const Header = () => {
      }  
 
   return (
+    <>
    <motion.header className={["fixed z-50 left-0 right-0 transition-all duration-300 ease-in-out",
                               !scrolled && "top-0 mx-0 sm:top-4 sm:mx-8 sm:rounded-2xl rounded-b-2xl", scrolled  && "top-0 mx-0 rounded-b-2xl",
                                 "bg-black/20 backdrop-blur-lg",
@@ -96,9 +156,8 @@ export const Header = () => {
             Order Now
           </button>
 
-          <div className="flex items-center gap-2 cursor-pointer group" onClick={()=>{
-            if(window.confirm("Logout?")) logout();
-          }}>
+          <div className="flex items-center gap-2 cursor-pointer group" 
+          onClick={() => setShowLogout(true)}>
             <UserAvatar size="10"/>
 
           </div>
@@ -161,5 +220,15 @@ export const Header = () => {
       </nav>
     
     </motion.header>
+
+     <AnimatePresence>
+        {showLogout && (
+          <LogoutModal
+            onConfirm={handleLogout}
+            onCancel={() => setShowLogout(false)}
+          />
+        )}
+      </AnimatePresence>
+      </>
   )
 }
