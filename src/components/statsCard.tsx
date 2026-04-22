@@ -27,7 +27,7 @@ export const StatsCard = ({
           </p>
           {/* Live indicator dot */}
           {live && !loading && (
-            <span className="w-1.5 h-1.5 rounded-full bg-[rgb(128,255,0)] animate-pulse shrink-0" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[rgb(128,255,0)] animate-pulse flex-shrink-0" />
           )}
         </div>
         <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-white/5 text-[rgb(128,255,0)]">
