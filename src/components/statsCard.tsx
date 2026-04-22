@@ -4,7 +4,7 @@ interface StatsCardProps {
   icon:     React.ReactNode;
   sub?:     string;
   loading?: boolean;
-  live?:    boolean;   // shows a pulsing green dot — for real-time cards
+  live?:    boolean;   
 }
 
 export const StatsCard = ({
